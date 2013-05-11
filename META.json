@@ -42,6 +42,8 @@
       },
       "runtime" : {
          "requires" : {
+            "DBIx::Class" : "0",
+            "Time::Piece::Plus" : "0.05",
             "perl" : "5.008005"
          }
       },
