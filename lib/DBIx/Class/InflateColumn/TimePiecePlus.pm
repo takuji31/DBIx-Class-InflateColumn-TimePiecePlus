@@ -5,6 +5,67 @@ use warnings;
 
 our $VERSION = "0.01";
 
+use parent qw/DBIx::Class/;
+
+use Time::Piece::Plus ();
+
+sub register_columns {
+    my ($self, $column, $info, @rest) = @_;
+
+    $self->next::method($column, $info, @rest);
+
+    return unless $info->{data_type};
+
+    my $data_type = lc($info->{data_type});
+    $info = {%$info}; 
+    if ($data_type eq 'datetime' || $data_type eq 'timestamp') {
+        $self->inflate_column(
+            $column,
+            {
+                inflate => sub {
+                    my ($value, $obj) = @_;
+
+
+                    $info->{__dbic_colname} = $column;
+
+                    local $ENV{TZ} = $info->{timezone} if exists $info->{timezone} && $info->{timezone};
+
+                    my $time = Time::Piece::Plus->parse_mysql_datetime(str => $value, as_localtime => $info->{is_local} // 1);
+
+                    return $time;
+                },
+                deflate => sub {
+                    my ($value, $obj) = @_;
+
+                    return $value->mysql_datetime;
+                },
+            },
+        );
+    } elsif ($data_type eq 'date') {
+        $self->inflate_column(
+            $column,
+            {
+                inflate => sub {
+                    my ($value, $obj) = @_;
+
+
+                    $info->{__dbic_colname} = $column;
+
+                    local $ENV{TZ} = $info->{timezone} if exists $info->{timezone} && $info->{timezone};
+
+                    my $time = Time::Piece::Plus->parse_mysql_date(str => $value, as_localtime => $info->{is_local} // 1);
+
+                    return $time;
+                },
+                deflate => sub {
+                    my ($value, $obj) = @_;
+
+                    return $value->mysql_date;
+                },
+            },
+        );
+    }
+}
 
 
 1;
