@@ -9,7 +9,9 @@ use parent qw/DBIx::Class/;
 
 use Time::Piece::Plus ();
 
-sub register_columns {
+__PACKAGE__->load_components(qw/InflateColumn/);
+
+sub register_column {
     my ($self, $column, $info, @rest) = @_;
 
     $self->next::method($column, $info, @rest);
@@ -48,8 +50,6 @@ sub register_columns {
                 inflate => sub {
                     my ($value, $obj) = @_;
 
-
-                    $info->{__dbic_colname} = $column;
 
                     local $ENV{TZ} = $info->{timezone} if exists $info->{timezone} && $info->{timezone};
 
