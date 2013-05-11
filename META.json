@@ -54,5 +54,16 @@
       }
    },
    "release_status" : "unstable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/takuji31/DBIx-Class-InflateColumn-TimePiecePlus/issues"
+      },
+      "homepage" : "https://github.com/takuji31/DBIx-Class-InflateColumn-TimePiecePlus",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/takuji31/DBIx-Class-InflateColumn-TimePiecePlus.git",
+         "web" : "https://github.com/takuji31/DBIx-Class-InflateColumn-TimePiecePlus"
+      }
+   },
    "version" : "0.01"
 }
